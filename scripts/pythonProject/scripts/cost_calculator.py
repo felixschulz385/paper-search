@@ -1,7 +1,18 @@
 import xml.etree.ElementTree as ET
 import tiktoken
+import os
 
-xml_file_path = '../data/source-papers.xml'
+
+xml_file_path = '../data/Task2_3_combined/combined.xml'
+
+
+if os.path.exists(xml_file_path):
+    print("The path is valid and the file exists.")
+    absolute_path = os.path.abspath(xml_file_path)
+    print("Absolute path:", absolute_path)
+else:
+    print("The path is invalid or the file does not exist.")
+
 
 tree = ET.parse(xml_file_path)
 root = tree.getroot()
@@ -22,8 +33,15 @@ for abstract in abstracts:
     text = abstract.text
     input_text += text
 
-prompt = "Based on the title and abstract of the following research paper, evaluate its relevance to the topic 'linking environmental changes to health' on a scale from 0 (no relevance) to 10 (highly relevant). Please provide only a single number (from 0 to 10) as your response without any additional explanation."
-prompt_all = prompt*2933
+prompt = f""" 
+            Based on the title and abstract of the following research paper, evaluate its relevance to the topic "linking environmental changes to health" with the following three criteria: 
+            First, the paper should explicitly establish a connection between specific environmental changes (such as pollution, climate change, deforestation, etc.) and specific health outcomes (such as respiratory diseases, mental health, etc.). 
+            Secondly, you should prefer studies that demonstrate or hypothesize a direct impact or correlation between the environmental change and health. 
+            Thirdly, avoid papers that only discuss environmental changes or health outcomes in isolation. Both elements should be central to the study. 
+
+            Your task is to rate the paper on a scale from 0 (no relevance) to 10 (highly relevant), focusing on papers with a clear, direct link between environmental changes and health outcomes as highly relevant. Keep the three criteria in mind while providing the rating. Provide only a single number (from 0 to 10) without any additional explanation. 
+"""
+prompt_all = prompt*5514
 
 total = input_text + prompt_all
 

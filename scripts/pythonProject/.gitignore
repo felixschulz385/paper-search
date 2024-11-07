@@ -1,0 +1,6 @@
+# Ignore environment variables
+keys.env
+*.env
+
+# Ignore logs
+data/logs/
